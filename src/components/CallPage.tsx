@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 interface CallPageProps {
   call: Call;
   onLeave: () => void;
+  isRoomCall?: boolean;
 }
 
 const ShareLinkButton = ({ callId }: { callId: string }) => {
@@ -33,7 +34,7 @@ const ShareLinkButton = ({ callId }: { callId: string }) => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-24 right-4 z-50 md:bottom-4">
       <button
         onClick={copyLink}
         className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white px-3 py-2 rounded-lg transition-colors"
@@ -57,7 +58,7 @@ const ShareLinkButton = ({ callId }: { callId: string }) => {
   );
 };
 
-export const CallPage = ({ call, onLeave }: CallPageProps) => {
+export const CallPage = ({ call, onLeave, isRoomCall = false }: CallPageProps) => {
   // Handle call cleanup when leaving
   const handleLeave = async () => {
     try {
@@ -75,12 +76,17 @@ export const CallPage = ({ call, onLeave }: CallPageProps) => {
 
   return (
     <StreamCall call={call}>
-      <CallPageContent onLeave={handleLeave} />
+      <CallPageContent onLeave={handleLeave} isRoomCall={isRoomCall} />
     </StreamCall>
   );
 };
 
-const CallPageContent = ({ onLeave }: { onLeave: () => Promise<void> }) => {
+interface CallPageContentProps {
+  onLeave: () => Promise<void>;
+  isRoomCall: boolean;
+}
+
+const CallPageContent = ({ onLeave, isRoomCall }: CallPageContentProps) => {
   const call = useCall();
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
@@ -133,7 +139,7 @@ const CallPageContent = ({ onLeave }: { onLeave: () => Promise<void> }) => {
         <div className="relative z-10">
           <CallControls onLeave={onLeave} />
         </div>
-        <ShareLinkButton callId={call.id} />
+        {isRoomCall && <ShareLinkButton callId={call.id} />}
       </div>
     </StreamTheme>
   );

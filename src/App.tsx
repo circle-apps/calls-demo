@@ -43,6 +43,7 @@ export default function App() {
   const [showCopiedToast, setShowCopiedToast] = useState(false);
   const [currentView, setCurrentView] = useState<AppView>('options');
   const [activeCall, setActiveCall] = useState<Call>();
+  const [isRoomCall, setIsRoomCall] = useState(false);
 
   const copyUserId = async () => {
     try {
@@ -68,6 +69,7 @@ export default function App() {
           await call.join({ create: true });
           setActiveCall(call);
           setCurrentView('in-call');
+          setIsRoomCall(true); // If joining via URL, it's always a room call
         } catch (err) {
           console.error('Failed to join call from URL:', err);
         }
@@ -122,12 +124,15 @@ export default function App() {
   const handleCallStarted = (call: Call) => {
     setActiveCall(call);
     setCurrentView('in-call');
+    // Set isRoomCall based on the current view
+    setIsRoomCall(currentView === 'create-room');
   };
 
   const handleCallEnded = () => {
     // Clean up the call state
     setActiveCall(undefined);
     setCurrentView('options');
+    setIsRoomCall(false);
 
     // Remove callId from URL if present
     const url = new URL(window.location.href);
@@ -145,7 +150,7 @@ export default function App() {
     return (
       <StreamVideo client={client}>
         <StreamTheme>
-          <CallPage call={activeCall} onLeave={handleCallEnded} />
+          <CallPage call={activeCall} onLeave={handleCallEnded} isRoomCall={isRoomCall} />
         </StreamTheme>
       </StreamVideo>
     );
