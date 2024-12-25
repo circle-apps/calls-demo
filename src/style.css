@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  @apply h-full w-full m-0 font-sans;
+}
+
+/* Dark theme for Stream Video UI */
+.str-video {
+  @apply bg-gray-900 text-white h-screen w-full flex flex-col min-w-0 max-w-full;
+}
+
+/* Override Stream Video UI component colors for dark theme */
+.str-video__participant-details {
+  @apply text-white !important;
+}
+
+.str-video__participant-name {
+  @apply text-white !important;
+}
+
+.str-video__notification {
+  @apply bg-gray-800 text-white !important;
+}
+
+.str-video__menu {
+  @apply bg-gray-800 !important;
+}
+
+.str-video__menu-item {
+  @apply text-white hover:bg-gray-700 !important;
+}
+
+.str-video__button {
+  @apply text-white !important;
+}
+
+/* Ensure text visibility in video components */
+.str-video__participant {
+  @apply text-white;
+}
+
+.str-video__call {
+  @apply bg-gray-900;
+}
+
+.str-video__grid {
+  @apply bg-gray-900;
+}
